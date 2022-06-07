@@ -29,6 +29,12 @@ const jsLoaders = () => {
 
 module.exports = {
   devServer: {
+    open: {
+      app: {
+        name: 'chrome',
+        arguments: ['--new-window'],
+      },
+    },
     port: 4200,
     hot: isDev,
   },
