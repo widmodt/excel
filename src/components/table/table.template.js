@@ -3,23 +3,30 @@ const CHARCODES = {
   Z: 90,
 };
 
-function createInfoColumn(char = "") {
+function createInfoColumn(char = "",index) {
   return `
-    <div class="column">${char}</div>
+    <div class="column" data-type="column" data-cell="${index}">
+    ${char}
+    <div class="col-resize" data-resize="col"></div> 
+    </div>
     `;
 }
 
-function createDataCells(data) {
+function createDataCells(data, index) {
   return `
-  <div class="cell" contenteditable>${data}</div>
+  <div class="cell" data-type="cell" data-cell="${index}" contenteditable>${data}</div>
   `;
 }
 
 function createRow(content, rowIndex) {
   return `
-    <div class="row">
-        <div class="row_info">${rowIndex ? rowIndex : ""}</div>
-        <div class="row_data">
+    <div class="row" data-type="row">
+        <div class="row_info">
+            ${rowIndex ? 
+            `${rowIndex} <div class="row-resize" data-resize="row"></div>` 
+            : ""}
+        </div>
+        <div class="row_data" data-type="data-row">
         ${content}
         </div>
     </div>
@@ -39,7 +46,7 @@ export function createTable(columnCount, rowCount) {
         String.fromCharCode(CHARCODES.A) +
         String.fromCharCode(CHARCODES.A + (CHARCODES.A - j));
     }
-    infoRow.push(createInfoColumn(char));
+    infoRow.push(createInfoColumn(char, j));
   }
   rows += createRow(infoRow.join(``));
 
@@ -48,7 +55,7 @@ export function createTable(columnCount, rowCount) {
     for (let i = 0; i <= columnCount; i++) {
       const data = ""; //create posibility to load data from file
 
-      dataRows.push(createDataCells(data));
+      dataRows.push(createDataCells(data, i));
     }
     rows += createRow(dataRows.join(""), j);
     dataRows = [];
