@@ -5,16 +5,26 @@ const CHARCODES = {
 
 function createInfoColumn(char = "",index) {
   return `
-    <div class="column" data-type="column" data-cell="${index}">
+    <div 
+    class="column" 
+    data-type="column" 
+    data-cell="${index}">
     ${char}
-    <div class="col-resize" data-resize="col"></div> 
+    <div class="col-resize" 
+    data-resize="col"></div> 
     </div>
     `;
 }
 
-function createDataCells(data, index) {
+function createDataCells(data, index, row) {
   return `
-  <div class="cell" data-type="cell" data-cell="${index}" contenteditable>${data}</div>
+  <div 
+  class="cell" 
+  data-type="cell" 
+  data-cell="${index}" 
+  data-id="${index}:${row-1}" 
+  contenteditable>${data}
+  </div>
   `;
 }
 
@@ -26,7 +36,8 @@ function createRow(content, rowIndex) {
             `${rowIndex} <div class="row-resize" data-resize="row"></div>` 
             : ""}
         </div>
-        <div class="row_data" data-type="data-row">
+        <div class="row_data"
+         data-type="data-row">
         ${content}
         </div>
     </div>
@@ -55,7 +66,7 @@ export function createTable(columnCount, rowCount) {
     for (let i = 0; i <= columnCount; i++) {
       const data = ""; //create posibility to load data from file
 
-      dataRows.push(createDataCells(data, i));
+      dataRows.push(createDataCells(data, i, j));
     }
     rows += createRow(dataRows.join(""), j);
     dataRows = [];

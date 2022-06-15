@@ -14,6 +14,14 @@ class Dom {
     return this.$el.outerHTML.trim();
   }
 
+  text(text) {
+    if (typeof text === 'string') {
+      this.$el.textContent = text
+    return this
+    } 
+    return this.$el.textContent
+  }
+
   clear() {
     this.html("");
     return this;
@@ -55,6 +63,33 @@ class Dom {
     Object.keys(styles).forEach(key => {
       this.$el.style = `${key}: ${styles[key]}`
     });
+  }
+
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+  focus() {
+    this.$el.focus()
+    return this
+  }
+  
+  addClass(className) {
+    this.$el.classList.add(className)
+    return this
+  }
+
+  removeClass(className) {
+    this.$el.classList.remove(className)
+    return this
+  }
+
+  id(parse) {
+    if (parse) {
+      const id = this.data.id.split(":")
+      return [+id[0], +id[1]]
+    } else {
+      return this.data.id
+    }
   }
 }
 
