@@ -11,14 +11,14 @@ export default function resizeTable(e) {
       document.onmousemove = (event) => {
         const delta = event.pageX - coords.right
         value = coords.width + delta + 2
-        $resizer.$el.style.right = -delta + 'px'
+        $resizer.$el.style.right = -delta - 2 + 'px'
         document.onmouseup = () => {
           const newWidth = value + 'px'
           document.querySelectorAll(`[data-cell="${index}"]`)
             .forEach(cell => {
               cell.style.width = newWidth
             }) 
-          $resizer.css({opacity: '', right: ''})
+          $resizer.css({opacity: 0, right: 0})
           $col.css({width: newWidth})
           document.onmousemove = 0
           document.onmouseup = null
