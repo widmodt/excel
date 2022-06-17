@@ -10,8 +10,11 @@ function createInfoColumn(char = "",index) {
     data-type="column" 
     data-cell="${index}">
     ${char}
-    <div class="col-resize" 
-    data-resize="col"></div> 
+      <div class="col-resize" 
+      data-resize="col">
+        <div class="col-resize-line">
+        </div> 
+      </div> 
     </div>
     `;
 }
@@ -33,7 +36,10 @@ function createRow(content, rowIndex) {
     <div class="row" data-type="row">
         <div class="row_info">
             ${rowIndex ? 
-            `${rowIndex} <div class="row-resize" data-resize="row"></div>` 
+            `${rowIndex} <div class="row-resize" data-resize="row">
+              <div class="row-resize-line">
+              </div> 
+            </div>` 
             : ""}
         </div>
         <div class="row_data"
@@ -46,7 +52,6 @@ function createRow(content, rowIndex) {
 
 export function createTable(columnCount, rowCount) {
   let rows = "";
-
   let infoRow = [];
   for (let j = 0; j <= columnCount; j++) {
     const char = null;
@@ -64,13 +69,11 @@ export function createTable(columnCount, rowCount) {
   let dataRows = [];
   for (let j = 1; j <= rowCount; j++) {
     for (let i = 0; i <= columnCount; i++) {
-      const data = ""; //create posibility to load data from file
-
+      const data = ""; 
       dataRows.push(createDataCells(data, i, j));
     }
     rows += createRow(dataRows.join(""), j);
     dataRows = [];
   }
-
   return rows;
 }

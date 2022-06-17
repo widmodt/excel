@@ -1,43 +1,41 @@
 import { $ } from "@core/dom";
 
-export default function resizeTable(e) {
-    const $resizer = $(e.target)
-    let value
-    if (e.target.dataset.resize == 'col') {
-      const $col = $resizer.closest('[data-type="column"]')
-      const coords = $col.getCoords()
-      const index = $col.data.cell
-      $resizer.css({opacity: 1})
-      document.onmousemove = (event) => {
-        const delta = event.pageX - coords.right
-        value = coords.width + delta + 2
-        $resizer.$el.style.right = -delta - 2 + 'px'
-        document.onmouseup = () => {
-          const newWidth = value + 'px'
-          document.querySelectorAll(`[data-cell="${index}"]`)
-            .forEach(cell => {
-              cell.style.width = newWidth
-            }) 
-          $resizer.css({opacity: 0, right: 0})
-          $col.css({width: newWidth})
-          document.onmousemove = 0
-          document.onmouseup = null
-        }
-      } 
-    } else if (e.target.dataset.resize == 'row') {
-      const $row = $resizer.closest('[data-type="row"]')
-      const coords = $row.getCoords()
-      document.onmousemove = (event) => {
-        const delta = event.pageY - coords.bottom
-        value = coords.height + delta + 2
-        $resizer.css({bottom: -delta - 3 + 'px'})
-        document.onmouseup = () => {
-          const newHeight = value + 'px'
-          $resizer.css({opacity: '', bottom: ''})
-          $row.css({height: newHeight})
-          document.onmousemove = 0
-          document.onmouseup = null
-        }
+export function resizeTable(e) {
+  const 
+    $resizer = $(e.target),
+    resizeType = $resizer.data.resize,
+    $resizable = $resizer.closest(`[data-type="${
+      resizeType == "col" ? "column" :  "row"
+    }"]`),
+    coords = $resizable.getCoords()
+  let 
+    value, newSize, delta
+    document.onmousemove = (event) => {
+      if (resizeType == "col") {
+        delta = event.pageX - coords.right
+        value = coords.width + delta
+        newSize = value + "px"
+        $resizer.css({right: -delta + "px"})
+      } else if (resizeType == "row") {
+        delta = event.pageY - coords.bottom
+        value = coords.height + delta
+        newSize = value + "px"
+        $resizer.css({bottom: -delta + "px"})
       }
     }
+  document.onmouseup = () => {
+    if (resizeType == "col") {
+      document.querySelectorAll(`[data-cell="${$resizable.data.cell}"]`)
+          .forEach(cell => {
+            cell.style.width = newSize
+          })
+      $resizable.css({width: newSize})
+      $resizer.css({ right: 0})
+    } else if (resizeType == "row") {
+      $resizable.css({height: newSize})
+      $resizer.css({ bottom: 0})
+    }
+    document.onmousemove = 0
+    document.onmouseup = null
+  }
 }

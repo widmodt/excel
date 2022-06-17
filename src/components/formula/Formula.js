@@ -12,7 +12,7 @@ export class Formula extends ExcelComponent {
 
   toHTML() {
     return `<div class="info">fx</div>
-        <div id="formula" class="input" contenteditable="" spellcheck="false"></div>`;
+      <div id="formula" class="input" contenteditable="" spellcheck="false"></div>`;
   }
 
   init() {
@@ -24,18 +24,20 @@ export class Formula extends ExcelComponent {
     this.$on('table:select', text => {
       this.$formula.text(text)
     })
+    this.$s
+    this.$subscribe(state => {
+      console.log('formulaState', state)
+    })
   }
 
   onInput(e) {
     const text = e.target.textContent
     this.$emit('formula:input', text)
-    
   }
 
   onKeydown(e) {
     if (e.key == 'Enter') {
       e.preventDefault()
-      e.target.textContent = ''
       this.$emit('formula:enter', e)
     }
   }
