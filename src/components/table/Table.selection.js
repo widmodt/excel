@@ -8,6 +8,10 @@ export class TableSelection{
     this.current = null
   }
 
+  get groupIds() {
+    return this.group.map($el => $el.id())
+  }
+
   select($el) {
     $el.focus()
     this.clearSelections()
@@ -29,5 +33,8 @@ export class TableSelection{
       this.group.push(cell)
       cell.addClass(TableSelection.className)
     }
+  }
+  applyStyle(style) {
+    this.group.forEach($el => $el.css(style))
   }
 }

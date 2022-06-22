@@ -4,7 +4,7 @@ export class Store {
     this.listeners = []
     this.rootReducer = rootReducer
   }
-    
+
   subscribe(fn) {
     this.listeners.push(fn)
     return {
@@ -15,12 +15,12 @@ export class Store {
   }
 
   dispatch(action) {
-    this.rootReducer(this.state, action)
+    this.state = this.rootReducer(this.state, action)
     this.listeners.forEach(listener => listener(this.state))
   }
 
   getState() {
-    return state
+    return JSON.parse(JSON.stringify(this.state))
   }
   
 }

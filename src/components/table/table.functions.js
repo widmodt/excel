@@ -1,5 +1,8 @@
+import { defaultStyles } from "../../constants"
+import { formatStyle } from "../../core/utils";
+
 export function isCell(e) {
-  return e.target.dataset.type == 'cell'
+  return e.target.dataset.type === 'cell'
 }
 
 export function idNextCell(e, target) {
@@ -29,4 +32,14 @@ export function idNextCell(e, target) {
       return
     }
     return newId.join(':')
+}
+
+export function getId(i,j) {
+  return  i +':'+j
+}
+
+export function initStyles() {
+  return Object.keys(defaultStyles).map(key => 
+    `${formatStyle(key)}: ${defaultStyles[key]}`
+  ).join(';')
 }

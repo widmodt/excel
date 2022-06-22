@@ -1,22 +1,25 @@
-import { ExcelComponent } from "@core/ExcelComponent";
 import { createTable } from "./table.template";
 import { resizeTable } from "./table.resize";
 import { TableSelection } from "./Table.selection";
 import { $ } from "../../core/dom";
 import { isCell } from "./table.functions";
 import { idNextCell } from "./table.functions"
+import * as actions from "../../store/actions"
+import { ExcelStateComponent } from "../../core/ExcelStateComponent";
+import { defaultStyles } from "../../constants";
+import { parse } from "../../core/parse";
 
-export class Table extends ExcelComponent {
+export class Table extends ExcelStateComponent {
   static className = "excel__table";
 
   constructor($root,options) {
     super($root, {
       name: "Table",
-      listeners: ['mousedown', 'keydown'],
+      listeners: ['mousedown', 'keydown', 'input'],
       ...options
     }),
-    this.rowCount = 20,
-    this.columnCount = 25
+    this.rowCount = 10,
+    this.columnCount = 10
   }
 
   prepare() {
@@ -26,33 +29,55 @@ export class Table extends ExcelComponent {
   }
 
   toHTML() {
-    return createTable(this.columnCount, this.rowCount);
+    return createTable(this.columnCount, this.rowCount, this.store);
   }
 
   init() {
     super.init()
-    this.selectCell(this.$root.find(`[data-id="0:0"]`))
+    this.selectCell(
+      this.$root.find(`[data-id="${this.store.state['currentSelectedCell']}"]`)
+    )
+    this.selection.current.text(this.store['currentText'])
     this.$on('formula:input', text => {
-      this.selection.current.text(text)
+      this.selection.current
+        .attr('data-value', text)
+      this.selection.current.text(parse(text))
+      this.dataStateSet(text)
     }
       
     )
-    this.$on('formula:enter', (e) => {
+    this.$on('formula:enter', () => {
       const $current = this.selection.current
       $current.focus()
     })
-    this.$subscribe(state => {
-      console.log('tableState', state)
+    this.$on('toolbar:applyStyle', style => {
+      this.selection.applyStyle(style)
+      this.$dispatch(actions.applyStyle({
+        value: style,
+        ids: this.selection.groupIds
+      }))
     })
   }
 
+  dataStateSet(text) {
+    this.$dispatch(
+      actions.changeText({
+        id: this.selection.current.id(),
+        value: text 
+      })
+    )
+  }
+
   onMousedown(e) {
-    resizeTable(e)
     const $target = $(e.target)
+    if ($target.data.type === "resize"){
+      this.resizeHandler(e)
+      return
+    }
     if (isCell(e)) {
       if (!e.shiftKey) {
         this.selectCell($target)
-        this.$emit('table:select', $target.text()) 
+        this.$emit('table:select', $target.data.value)
       } else {
         this.selection.selectGroup($target)
       }
@@ -60,9 +85,15 @@ export class Table extends ExcelComponent {
   }
   
   selectCell($cell) {
+    const styles = $cell.css(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
+    this.$dispatch(actions.changeText({value: $cell.text(), id: $cell.data.id}))
     this.selection.select($cell)
-    this.$emit('table:input', $cell.text())
-    this.$dispatch({type: 'TEST'})
+  }
+
+  async resizeHandler(e) {
+    const data = await resizeTable(e)
+    this.$dispatch(actions.tableResize(data()))
   }
 
   onKeydown(e) {
@@ -80,8 +111,13 @@ export class Table extends ExcelComponent {
       this.selectCell($next)
       return
     }
-    this.$emit('table:input', $target.text()) 
     
   }
-
+  
+  onInput(event) {
+    this.selection.current
+        .attr('data-value', $(event.target).text())
+    this.$emit('table:input', $(event.target).text()) 
+    this.dataStateSet($(event.target).text())
+  }
 }
