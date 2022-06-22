@@ -1,3 +1,4 @@
+import { defaultStyles } from "../constants";
 class Dom {
   constructor(selector) {
     this.$el =
@@ -15,11 +16,11 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text === "string") {
       this.$el.textContent = text
-    return this
+      return this
     } 
-    return this.$el.textContent
+    return this.$el.textContent.trim()
   }
 
   clear() {
@@ -60,17 +61,34 @@ class Dom {
   }
 
   css(styles = {}) {
+    if (Array.isArray(styles)) {
+      let computedStyles = {}
+      styles.forEach(key => {
+        computedStyles[key] = this.$el.style[key]
+      })
+      return computedStyles
+    }
     Object.keys(styles).forEach(key => {
-      this.$el.style = `${key}: ${styles[key]}`
-    });
+      this.$el.style[key] = styles[key]
+    })
+    return this
   }
 
   find(selector) {
     return $(this.$el.querySelector(selector))
   }
+
   focus() {
     this.$el.focus()
     return this
+  }
+
+  attr(name, value) {
+    if (value) {
+      this.$el.setAttribute(name, value)
+      return this
+    }
+    return this.$el.getAttribute(name)
   }
   
   addClass(className) {
