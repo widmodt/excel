@@ -1,4 +1,3 @@
-import { defaultStyles } from "../constants";
 class Dom {
   constructor(selector) {
     this.$el =
@@ -17,7 +16,7 @@ class Dom {
 
   text(text) {
     if (typeof text === "string") {
-      this.$el.textContent = text
+      this.$el.textContent = text.trim()
       return this
     } 
     return this.$el.textContent.trim()

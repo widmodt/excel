@@ -8,22 +8,20 @@ import { APPLY_STYLE,
 export function rootReducer(state, action) {
   switch (action.type) {
     case CHANGE_TEXT:
-      const newCurrentText = {currentText: action.data.value}
-      const newState = {[action.data.id]: action.data.value}
-      const newDataState = {dataState: {...state.dataState, ...newState}}
-      return {...state, ...newDataState, ...newCurrentText, currentSelectedCell: action.data.id}
+      const newDataState = {dataState: {
+        ...state.dataState, 
+        [action.data.id]: action.data.value}
+      }
+      return {...state, 
+        ...newDataState, 
+        currentText: action.data.value, 
+        currentSelectedCell: action.data.id
+      }
     case TABLE_RESIZE:
-      // const field = action.data.type === 'col' ? 'tableSizeCol' : 'tableSizeRow'
-      if (action.data.type === 'col') {
-        const newState = {[action.data.id]: action.data.value}
-        const newTableSizeCol = 
-          {tableSizeCol: {...state.tableSizeCol, ...newState}}
-        return {...state, ...newTableSizeCol}
-      } else {
-        const newState = {[action.data.id]: action.data.value}
-        const newTableSizeRow = 
-          {tableSizeRow: {...state.tableSizeRow, ...newState}}
-        return {...state, ...newTableSizeRow}
+      const sizeField = action.data.type === 'col' ? 'tableSizeCol' : 'tableSizeRow'
+      return {...state, 
+        [sizeField]: {...state[sizeField], 
+        [action.data.id]: action.data.value}
       }
     case CHANGE_STYLES:
       return {...state, currentStyles: action.data}

@@ -77,6 +77,9 @@ export class Table extends ExcelStateComponent {
     if (isCell(e)) {
       if (!e.shiftKey) {
         this.selectCell($target)
+        if ($target === this.selection.current) {
+          $target.text($target.data.value)
+        }
         this.$emit('table:select', $target.data.value)
       } else {
         this.selection.selectGroup($target)
@@ -85,10 +88,9 @@ export class Table extends ExcelStateComponent {
   }
   
   selectCell($cell) {
+    this.selection.select($cell)
     const styles = $cell.css(Object.keys(defaultStyles))
     this.$dispatch(actions.changeStyles(styles))
-    this.$dispatch(actions.changeText({value: $cell.text(), id: $cell.data.id}))
-    this.selection.select($cell)
   }
 
   async resizeHandler(e) {
@@ -111,13 +113,13 @@ export class Table extends ExcelStateComponent {
       this.selectCell($next)
       return
     }
-    
   }
   
-  onInput(event) {
+  onInput(e) {
+    const $target = $(e.target)
     this.selection.current
-        .attr('data-value', $(event.target).text())
-    this.$emit('table:input', $(event.target).text()) 
-    this.dataStateSet($(event.target).text())
+        .attr('data-value', $target.text())
+    this.$emit('table:input', $target.text()) 
+    this.dataStateSet($target.data.value)
   }
 }

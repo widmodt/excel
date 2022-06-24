@@ -1,4 +1,5 @@
 import { rangeId } from "../../core/utils"
+import { parse } from "../../core/parse"
 
 export class TableSelection{
   static className = 'selected'
@@ -21,7 +22,10 @@ export class TableSelection{
   }
 
   clearSelections() {
-    this.group.forEach(cell => cell.removeClass(TableSelection.className))
+    this.group.forEach(cell => {
+      cell.removeClass(TableSelection.className)
+      cell.text(parse(cell.text()))
+    })
     this.group = []
   }
 
