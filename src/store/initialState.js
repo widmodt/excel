@@ -16,3 +16,7 @@ const defaultState = {
 export const initialState = storage('excelState') 
   ? storage('excelState')
   : defaultState
+
+export function normalizeInitialState(state) {
+  return state ? state : defaultState
+}
