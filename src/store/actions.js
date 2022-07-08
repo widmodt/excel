@@ -2,7 +2,7 @@ import { CHANGE_TEXT,
   CHANGE_STYLES, 
   TABLE_RESIZE, 
   APPLY_STYLE, 
-  CHANGE_NAME } from "./types";
+  CHANGE_NAME} from "./types";
 
 export function tableResize(data) {
   return {
@@ -37,4 +37,4 @@ export function saveTableName(data) {
     type: CHANGE_NAME,
     data
   }
-} 
+}

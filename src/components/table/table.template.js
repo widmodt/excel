@@ -70,12 +70,10 @@ function createRow(content, rowIndex, size) {
 export function createTable(columnCount, rowCount, store) {
   let rows = "";
   let infoRow = [];
-
   const storeSizeCol = store.state.tableSizeCol,
     storeSizeRow = store.state.tableSizeRow,
     storeCellData = store.state.dataState,
     storeCellStyle = store.state.stylesState
-
   for (let j = 0; j <= columnCount; j++) {
     const char = null;
     if (j < 26) {
