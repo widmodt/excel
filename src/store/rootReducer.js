@@ -3,7 +3,7 @@ import { APPLY_STYLE,
   CHANGE_NAME, 
   CHANGE_TEXT, 
   CHANGE_STYLES, 
-  TABLE_RESIZE } from "./types"
+  TABLE_RESIZE} from "./types"
 
 export function rootReducer(state, action) {
   switch (action.type) {

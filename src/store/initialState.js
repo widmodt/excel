@@ -1,7 +1,8 @@
 import { defaultStyles } from "../constants"
 import { storage } from "../core/utils"
 
-const defaultState = {
+export const defaultState = {
+  openedData: 0,
   tableName: 'newTable',
   tableSizeCol: {},
   tableSizeRow: {},
@@ -13,10 +14,8 @@ const defaultState = {
   
 }
 
-export const initialState = storage('excelState') 
-  ? storage('excelState')
+export function initialState(id) {
+  return storage(id) 
+  ? storage(id)
   : defaultState
-
-export function normalizeInitialState(state) {
-  return state ? state : defaultState
 }

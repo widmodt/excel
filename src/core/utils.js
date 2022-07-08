@@ -1,3 +1,5 @@
+import { ActiveRoute } from "./routes/ActiveRoute";
+
 export function capitalize(string) {
   if (typeof string !== "string") {
     return "";
@@ -26,6 +28,10 @@ export function storage(key, data = null) {
     return JSON.parse(localStorage.getItem(key))
   }
   localStorage.setItem(key, JSON.stringify(data))
+}
+
+export function deleteCurrentTable() {
+  localStorage.removeItem("excel:" + ActiveRoute.param)
 }
 
 export function debounce(fn, wait) {

@@ -1,10 +1,16 @@
-function toHTML() {
+function toHTML(key) {
+  const storageState = localStorage.getItem(key)
+  const name = JSON.parse(storageState).tableName
+  // const date = new Date(+key.slice(6))
+  const date = new Date(JSON.parse(storageState).openedData)
   return `
   <li class="db__record">
-    <a href="#">Table 1</a>
-    <strong>07.06.2022</strong>
-  </li>
-  `
+    <a href="#${key}">${name}</a>
+    <strong>
+      ${date.toLocaleDateString()}
+      ${date.toLocaleTimeString()}
+    </strong>
+  </li>`
 }
 
 function getAllKeys() {
@@ -21,14 +27,18 @@ function getAllKeys() {
 
 export function createRecordsTable() {
   const keys = getAllKeys()
+  if (keys.length == 0) {
+    return `
+    <p>Not created any table</p>`
+  }
   return `
     <div class="db__list-header">
       <span>Name</span>
-      <span>Last opened data</span>
+      <span>Opened date</span>
     </div>
     <ul class="db__list">
 
-      ${keys.map(toHTML).join('')}
+      ${keys.map(key => toHTML(key)).join('')}
 
     </ul>`
   

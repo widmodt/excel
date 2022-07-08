@@ -1,13 +1,15 @@
 import { ExcelStateComponent } from "../../core/ExcelStateComponent";
 import { $ } from "../../core/dom";
+import { deleteCurrentTable } from "../../core/utils";
 import * as action from "../../store/actions"
+import { ActiveRoute } from "../../core/routes/ActiveRoute";
 export class Header extends ExcelStateComponent {
   static className = 'excel__header'
 
   constructor($root, options) {
     super($root, {
       name: 'Header',
-      listeners: ['keydown', 'focusout'],
+      listeners: ['keydown', 'focusout','mousedown'],
       ...options
       })
   }
@@ -28,15 +30,29 @@ export class Header extends ExcelStateComponent {
     this.$dispatch(action.saveTableName(name))
   }
 
+  onMousedown(e) {
+    const target = $(e.target)
+    if (target.data.type === 'delete') {
+      const decision = confirm("delete table?")
+      if (decision) { 
+        deleteCurrentTable()
+        ActiveRoute.navigate('#dashboard')
+        // window.location.replace('#dashboard')
+      }
+    } else if (target.data.type === 'exit') {
+      window.location.replace('#dashboard')
+    }
+  }
+
   toHTML() {
     return `<input type="text" class="input" 
     value="${this.store.state.tableName}" />
       <div>
         <div class="button">
-          <i class="material-icons"> delete </i>
+          <i class="material-icons" data-type="delete"> delete </i>
         </div>
         <div class="button">
-          <i class="material-icons"> exit_to_app </i>
+          <i class="material-icons" data-type="exit"> exit_to_app </i>
         </div>
       </div>`
     }
