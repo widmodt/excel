@@ -1,3 +1,15 @@
+export function $(selector) {
+  return new Dom(selector);
+}
+
+$.create = (nameTag, classes = "") => {
+  const el = document.createElement(nameTag);
+  if (classes) {
+    el.classList.add(classes);
+  }
+  return $(el);
+};
+
 class Dom {
   constructor(selector) {
     this.$el =
@@ -109,15 +121,3 @@ class Dom {
     }
   }
 }
-
-export function $(selector) {
-  return new Dom(selector);
-}
-
-$.create = (nameTag, classes = "") => {
-  const el = document.createElement(nameTag);
-  if (classes) {
-    el.classList.add(classes);
-  }
-  return $(el);
-};

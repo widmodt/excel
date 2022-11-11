@@ -14,7 +14,8 @@ export class Router {
     this.changePageHandler = this.changePageHandler.bind(this)
 
     this.init() 
-  }
+    }
+    
   init() {
     window.addEventListener('hashchange', this.changePageHandler)
     this.changePageHandler()
@@ -25,7 +26,15 @@ export class Router {
     if ( this.page ) {
       this.page.destroy()
     }
-    const Page = ActiveRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
+
+    let Page = null; 
+    if (ActiveRoute.path.includes('excel')) {
+      Page = this.routes.excel
+    } else {
+      Page = this.routes.dashboard
+      ActiveRoute.navigate('#dashboard')
+    }
+    // const Page = ActiveRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
     this.page = new Page(ActiveRoute.param)
     this.$placeholder.append(this.page.getRoot())
     this.page.afterRender()

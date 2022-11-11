@@ -1,10 +1,6 @@
 import { getId, initStyles } from "./table.functions";
-import { defaultStyles } from "../../constants";
 import { parse } from "../../core/parse";
-const CHARCODES = {
-  A: 65,
-  Z: 90,
-};
+import { CHARCODES } from "../../constants";
 
 function createInfoColumn(char = "",index, size) {
   return `
@@ -40,14 +36,14 @@ function createDataCells(data, index, id, size, styles) {
   `;
 }
 
-function createRow(content, rowIndex, size) {
+function createRow(data, rowIndex, size) {
   return `
     <div 
       class="row" 
       data-type="row" 
       data-row="${rowIndex}"
       ${size ? `style=height:` + size + `px;` : ''}>
-        <div class="row_info">
+        <div class="row_info" ${!rowIndex ? `id="info_cell"` : ``}>
             ${rowIndex ? 
             `${rowIndex} 
             <div 
@@ -61,7 +57,7 @@ function createRow(content, rowIndex, size) {
         </div>
         <div class="row_data"
          data-type="data-row">
-        ${content}
+        ${data}
         </div>
     </div>
   `;
@@ -76,6 +72,9 @@ export function createTable(columnCount, rowCount, store) {
     storeCellStyle = store.state.stylesState
   for (let j = 0; j <= columnCount; j++) {
     const char = null;
+    // if (j == -1) {
+    //   char = null
+    // } else 
     if (j < 26) {
       char = String.fromCharCode(CHARCODES.A + j);
     } else if (j >= 26) {
