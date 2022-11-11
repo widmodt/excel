@@ -1,7 +1,6 @@
 function toHTML(key) {
   const storageState = localStorage.getItem(key)
   const name = JSON.parse(storageState).tableName
-  // const date = new Date(+key.slice(6))
   const date = new Date(JSON.parse(storageState).openedData)
   return `
   <li class="db__record">

@@ -4,3 +4,7 @@ export const defaultStyles = {
   textDecoration: 'none',
   fontStyle: 'normal'
 }
+ export const CHARCODES = {
+  A: 65,
+  Z: 90,
+};

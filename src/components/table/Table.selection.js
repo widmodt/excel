@@ -1,5 +1,6 @@
-import { rangeId } from "../../core/utils"
+import { parseId, rangeId } from "../../core/utils"
 import { parse } from "../../core/parse"
+import { $ } from "../../core/dom"
 
 export class TableSelection{
   static className = 'selected'
@@ -7,6 +8,7 @@ export class TableSelection{
   constructor() {
     this.group = []
     this.current = null
+    
   }
 
   get groupIds() {
@@ -19,6 +21,7 @@ export class TableSelection{
     this.group.push($el)
     this.current = $el
     $el.addClass(TableSelection.className)
+    this.setIdToInfoCell()
   }
 
   clearSelections() {
@@ -38,7 +41,13 @@ export class TableSelection{
       cell.addClass(TableSelection.className)
     }
   }
+  
   applyStyle(style) {
     this.group.forEach($el => $el.css(style))
+  }
+
+  setIdToInfoCell() {
+    this.$infoCell = this.$infoCell || $('#info_cell')
+    this.$infoCell.text(parseId(this.current.id()))
   }
 }
