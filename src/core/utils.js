@@ -1,3 +1,6 @@
+import { CHARCODES } from "../constants";
+import { ActiveRoute } from "./routes/ActiveRoute";
+
 export function capitalize(string) {
   if (typeof string !== "string") {
     return "";
@@ -28,6 +31,10 @@ export function storage(key, data = null) {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
+export function deleteCurrentTable() {
+  localStorage.removeItem("excel:" + ActiveRoute.param)
+}
+
 export function debounce(fn, wait) {
   let timeout
   return function(...args) {
@@ -38,4 +45,17 @@ export function debounce(fn, wait) {
     clearTimeout(timeout)
     timeout = setTimeout(later, wait);
   }
+}
+
+export function parseId(data) {
+    if (data) {
+      const id = data.split(":")
+      return `${String.fromCharCode(CHARCODES.A + +id[0])}:${id[1]}`
+    } else {
+      return this.data.id
+    }
+}
+
+export function preventDefault(event) {
+  event.preventDefault()
 }

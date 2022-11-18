@@ -111,6 +111,7 @@ export class Table extends ExcelStateComponent {
     if (moveKeys.includes(e.key) && !e.shiftKey) {
       const $next = this.$root.find(`[data-id="${idNextCell(e, $target)}"]`)
       this.selectCell($next)
+      this.$emit('table:select', $next.data.value)
       return
     }
   }

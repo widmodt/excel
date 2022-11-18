@@ -1,9 +1,43 @@
+export function $(selector) {
+  return new Dom(selector);
+}
+
+$.create = (nameTag, classes = "") => {
+  const el = document.createElement(nameTag);
+  if (classes) {
+    el.classList.add(classes);
+  }
+  return $(el);
+};
+
 class Dom {
   constructor(selector) {
     this.$el =
       typeof selector === "string"
         ? document.querySelector(selector)
         : selector;
+  }
+
+  addClass(className) {
+    this.$el.classList.add(className)
+    return this
+  }
+
+  append(node) {
+    if (node instanceof Dom) {
+      node = node.$el;
+    }
+    if (Element.prototype.append) {
+      this.$el.append(node);
+    } else {
+      this.$el.appendChild(node);
+    }
+    return this;
+  }
+
+  clear() {
+    this.html('')
+    return this
   }
 
   html(html) {
@@ -22,29 +56,12 @@ class Dom {
     return this.$el.textContent.trim()
   }
 
-  clear() {
-    this.html("");
-    return this;
-  }
-
   on(eventType, callback) {
     this.$el.addEventListener(eventType, callback)
   }
 
   off(eventType, callback) {
     this.$el.removeEventListener(eventType, callback)
-  }
-
-  append(node) {
-    if (node instanceof Dom) {
-      node = node.$el;
-    }
-    if (Element.prototype.append) {
-      this.$el.append(node);
-    } else {
-      this.$el.appendChild(node);
-    }
-    return this;
   }
 
   closest(selector) {
@@ -89,11 +106,6 @@ class Dom {
     }
     return this.$el.getAttribute(name)
   }
-  
-  addClass(className) {
-    this.$el.classList.add(className)
-    return this
-  }
 
   removeClass(className) {
     this.$el.classList.remove(className)
@@ -109,15 +121,3 @@ class Dom {
     }
   }
 }
-
-export function $(selector) {
-  return new Dom(selector);
-}
-
-$.create = (nameTag, classes = "") => {
-  const el = document.createElement(nameTag);
-  if (classes) {
-    el.classList.add(classes);
-  }
-  return $(el);
-};
