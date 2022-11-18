@@ -55,3 +55,7 @@ export function parseId(data) {
       return this.data.id
     }
 }
+
+export function preventDefault(event) {
+  event.preventDefault()
+}
