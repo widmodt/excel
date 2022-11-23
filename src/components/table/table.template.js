@@ -71,10 +71,7 @@ export function createTable(columnCount, rowCount, store) {
     storeCellData = store.state.dataState,
     storeCellStyle = store.state.stylesState
   for (let j = 0; j <= columnCount; j++) {
-    const char = null;
-    // if (j == -1) {
-    //   char = null
-    // } else 
+    let char = null;
     if (j < 26) {
       char = String.fromCharCode(CHARCODES.A + j);
     } else if (j >= 26) {
